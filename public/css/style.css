@@ -1,0 +1,34 @@
+.main-sidebar {
+    background-color: #145896;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #145896;
+    background-color: #fff;
+}
+
+.nav-pills .nav-link:not(.active) {
+    color: #fff;
+}
+
+
+.nav-pills .nav-link:not(.active):hover {
+    color: #fff;
+}
+
+.nav-sidebar > .nav-item {
+    margin-bottom: -13px;
+}
+
+span.brand-text,.info a.d-block {
+    color: #fff;
+}
+
+.content-wrapper {
+    background-color: #d1d6ea;
+}
+
+footer a, footer a:hover {
+    color: #145896;
+    text-decoration: none;
+}
