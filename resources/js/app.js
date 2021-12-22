@@ -12,15 +12,24 @@ Vue.use(ViewUI);
 // import router file
 import router from './router'
 
+// import common file 
+import common from './common'
+Vue.mixin(common)
+
+// import store file
+import store from './store'
 
 // import moment js
-Vue.use(require('vue-moment'));
-
+var moment = require('moment');
+Vue.prototype.moment = moment;
 // include components
 Vue.component('mainapp',require('./components/mainapp.vue').default)
+Vue.component('loginapp',require('./components/Loginapp.vue').default)
+
 
 // use vue
 const app = new Vue({
     el : "#app",
+    store,
     router
 });

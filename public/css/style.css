@@ -17,7 +17,7 @@
 }
 
 .nav-sidebar > .nav-item {
-    margin-bottom: -13px;
+    margin-bottom: 7px;
 }
 
 span.brand-text,.info a.d-block {
@@ -32,3 +32,42 @@ footer a, footer a:hover {
     color: #145896;
     text-decoration: none;
 }
+
+nav.main-header {
+    z-index: 1;
+}
+
+.image_display img {
+    width: 150px;
+    height:150px
+}
+
+img.image_cat {
+    width: 55px;
+    height:55px
+}
+
+.login {
+    min-height: 100vh;
+  }
+  
+  .bg-image {
+    background-image: url('../images/login_pic.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .login-heading {
+    font-weight: 300;
+  }
+  
+  .btn-login {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .assign_button  {
+      margin: 20px;
+  }

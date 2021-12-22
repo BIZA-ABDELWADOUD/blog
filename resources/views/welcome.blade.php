@@ -9,11 +9,29 @@
         <link rel="stylesheet" href="{{mix('/css/app.css')}}">
         <link rel="stylesheet" href="{{asset('/css/style.css')}}">
 
+        <script>
+            (function () {
+                window.Laravel = {
+                    csrfToken : '{{ csrf_token() }}'
+                };
+            })();
+        </script>
+
     </head>
     <body>
         
        <div id="app">
-           <mainapp></mainapp>
+           @if(Auth::check() && Auth::user()->role->Permission)
+          
+           <mainapp :user="{{Auth::user()}}" 
+           :Permission="{{Auth::user()->role->Permission}}"></mainapp>
+           @elseif(Auth::check())
+           <mainapp :user="{{Auth::user()}}" 
+           ></mainapp>
+           @else
+           {{-- <mainapp :user="false"></mainapp> --}}
+           <script>window.location = "/login" ;</script>
+           @endif
        </div>
     </body>
     <script src="{{mix('/js/app.js')}}"></script>

@@ -2,61 +2,58 @@ import Vue from 'vue';
 import Router from 'vue-router';
 Vue.use(Router);
 
-import tags from './components/pages/tags.vue'
-import categories from './components/pages/categories.vue'
-import home from './components/pages/home.vue'
-import users from './components/pages/users.vue'
-import first from './components/pages/firstVue.vue'
-import second from './components/pages/secondVue.vue'
-import testing from './components/pages/testing.vue'
-import hooks from './components/pages/tuto/hooks.vue'
-import methods from './components/pages/tuto/methods.vue'
+import tags from './components/pages/admin/tags.vue'
+import categories from './components/pages/admin/categories.vue'
+import home from './components/pages/admin/home.vue'
+import users from './components/pages/admin/users.vue'
+import login from './components/pages/admin/login.vue'
+import role from './components/pages/admin/role.vue'
+import roleAssign from './components/pages/admin/roleAssign.vue'
+
+
+
 
 const routes = [
 
     {
         path : '/',
-        component : home
+        component : home,
+        name : 'home'
     },
     {
         path : '/tags',
-        component : tags
+        component : tags,
+        name : 'tags'
     },
     {
         path : '/categories',
-        component : categories
+        component : categories,
+        name : 'categories'
     },
-
     {
         path : '/users',
-        component : users
+        component : users,
+        name : 'users'
     },
     {
-        path : '/first',
-        component : first
+        path : '/login',
+        component : login,
+        name : 'login'
     },
+    {
+        path : '/role',
+        component : role,
+        name : 'role'
+    },
+    {
+        path : '/Assign_Roles',
+        component : roleAssign,
+        name : 'Assign_Roles'
+    },
+  
+  
 
-    {
-        path : '/second',
-        component : second
-    },
 
-    {
-        path : '/testing',
-        component : testing
-    },
-
-    //hooks
-    {
-        path : '/hooks',
-        component : hooks
-    },
-
-    //methods 
-    {
-        path : '/methods',
-        component : methods
-    }
 ]
 
 export default new Router({
