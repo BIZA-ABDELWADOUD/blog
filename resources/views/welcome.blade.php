@@ -8,7 +8,7 @@
         <title>Welcome To Essaouira</title>
         <link rel="stylesheet" href="{{mix('/css/app.css')}}">
         <link rel="stylesheet" href="{{asset('/css/style.css')}}">
-
+       
         <script>
             (function () {
                 window.Laravel = {

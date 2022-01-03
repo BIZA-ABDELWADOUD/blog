@@ -1,6 +1,7 @@
 // load bootstrap
 require('./bootstrap');
-require("admin-lte")
+
+require("admin-lte");
 
 // load vue
 window.Vue = require('vue')
@@ -23,7 +24,7 @@ Vue.mixin(jsontohtml)
 //import Editor from 'vue-editor-js'
 
 import Editor from 'vue-editor-js/src/index' 
-import List from '@editorjs/list';
+
 Vue.use(Editor)
 
 // import store file//

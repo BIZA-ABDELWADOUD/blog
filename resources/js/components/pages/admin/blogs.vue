@@ -119,13 +119,14 @@ export default {
       }
     },
 
-    async save(response) {
+    async onSave(response) {
       var data = response
       await this.outputHtml(data.blocks)
 			console.log(this.articleHtml)
     },
 
     async invokeSave() {
+      
       // this.$refs.editor._data.state.editor.save();
       this.$refs.editor._data.state.editor
         .save()
