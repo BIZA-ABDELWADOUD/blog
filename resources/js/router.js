@@ -9,7 +9,7 @@ import users from './components/pages/admin/users.vue'
 import login from './components/pages/admin/login.vue'
 import role from './components/pages/admin/role.vue'
 import roleAssign from './components/pages/admin/roleAssign.vue'
-
+import blogs from './components/pages/admin/blogs.vue'
 
 
 
@@ -29,6 +29,11 @@ const routes = [
         path : '/categories',
         component : categories,
         name : 'categories'
+    },
+    {
+        path : '/blogs',
+        component : blogs,
+        name : 'blogs'
     },
     {
         path : '/users',

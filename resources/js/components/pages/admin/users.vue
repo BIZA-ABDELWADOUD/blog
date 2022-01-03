@@ -168,8 +168,8 @@
       </p>
       <div style="text-align: center">
         <p>
-          Are you sure to delete the tag :
-          <span style="color: #ed4014">{{ deleteitem.tagName }}</span> ?
+          Are you sure to delete the user :
+          <span style="color: #ed4014">{{ deleteitem.FullName }}</span> ?
         </p>
       </div>
       <div slot="footer">
@@ -179,7 +179,7 @@
           long
           :disabled="isDeleting"
           :loading="isDeleting"
-          @click="deleteTag"
+          @click="deleteUser"
           >{{ isDeleting ? "Deleting..." : "Delete" }}</Button
         >
       </div>
@@ -312,24 +312,24 @@ export default {
       this.Editmodal = true;
       this.index = index;
     },
-    async deleteTag(tag, i) {
+    async deleteUser(user, i) {
       this.isDeleting = true;
       const res = await this.ExecuteMethod(
         "post",
-        "/app/delete_tag",
+        "/app/delete_user",
         this.deleteitem
       );
       if (res.status == 200) {
-        this.tags.splice(this.deletingIndex, 1);
-        this.message("success", "Tag Name was deleted successfully.");
+        this.users.splice(this.deletingIndex, 1);
+        this.message("success", "The specified user was deleted successfully.");
       } else {
         this.swr();
       }
       this.isDeleting = false;
       this.deletemodal = false;
     },
-    showdeletingmodal(tag, i) {
-      this.deleteitem = tag;
+    showdeletingmodal(user, i) {
+      this.deleteitem = user;
       this.deletingIndex = i;
       this.deletemodal = true;
     },

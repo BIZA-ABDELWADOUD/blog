@@ -27,10 +27,13 @@ Route::prefix('app')->middleware([AdminCheck::class])->group(function(){
     Route::post('/user_login','UserController@LoginMethod');
     Route::post('/edit_user','UserController@update');
     Route::get('/get_users','UserController@index');
-    
+    Route::post('/delete_user','UserController@destroy');
+
     Route::get('/get_roles','RoleController@index');
     Route::post('/create_role','RoleController@store');
     Route::post('/edit_role','RoleController@update');
+    Route::post('/delete_role','RoleController@destroy');
+
 
     Route::post('/assign_roles','RoleController@assignroles');
 
@@ -45,7 +48,7 @@ Route::prefix('app')->middleware([AdminCheck::class])->group(function(){
 });
 
 
-
+Route::post('blogs','BlogController@uploadEditorImage');
 
 Route::get('/login', function () {
     return view('login');

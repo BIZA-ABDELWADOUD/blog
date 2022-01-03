@@ -31,9 +31,10 @@ class RoleController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        return Role::where('id',$request->id)->delete();
+
     }
 
     public function assignroles(Request $request) {

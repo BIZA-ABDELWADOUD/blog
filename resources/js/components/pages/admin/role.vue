@@ -29,7 +29,7 @@
         <div class="card">
           <div class="card-header">
             <Button size="small" type="primary" @click="Addmodal = true"
-              ><Icon type="md-add" />
+              v-if="isWritePermitted"><Icon type="md-add" />
               Add Role
             </Button>
           </div>
@@ -50,8 +50,8 @@
                   <td>{{role.roleName}}</td>
                   <td>{{ moment(role.created_at).fromNow() }}</td>
                   <td>
-                    <Button size="small" type="warning" @click="showeditmodal(role,i)">Edit</Button>
-                    <Button size="small" type="error" @click="showdeletingmodal(role,i)" :loading="role.isDeleting">Delete</Button>
+                    <Button size="small" type="warning" @click="showeditmodal(role,i)" v-if="isUpdatePermitted">Edit</Button>
+                    <Button size="small" type="error" @click="showdeletingmodal(role,i)" :loading="role.isDeleting" v-if="isDeletePermitted">Delete</Button>
                   </td>
                 </tr>
               </tbody>
@@ -107,10 +107,10 @@
             <span> confirmation</span>
         </p>
         <div style="text-align:center">
-          <p>Are you sure to delete the tag : <span style="color:#ed4014">{{deleteitem.tagName}}</span> ?</p>
+          <p>Are you sure to delete the role : <span style="color:#ed4014">{{deleteitem.roleName}}</span> ?</p>
         </div>
         <div slot="footer">
-            <Button type="error" size="large" long :disabled="isDeleting" :loading="isDeleting" @click="deleteTag">{{isDeleting ? 'Deleting...' : 'Delete'}}</Button>
+            <Button type="error" size="large" long :disabled="isDeleting" :loading="isDeleting" @click="deleteRole">{{isDeleting ? 'Deleting...' : 'Delete'}}</Button>
         </div>
     </Modal>
     <!-- end modal to delete tag -->
@@ -214,12 +214,12 @@ export default {
       this.Editmodal = true
       this.index = index
     },
-    async deleteTag(tag,i) {
+    async deleteRole(role,i) {
       this.isDeleting = true
-      const res = await this.ExecuteMethod('post','/app/delete_tag',this.deleteitem)
+      const res = await this.ExecuteMethod('post','/app/delete_role',this.deleteitem)
       if(res.status==200) {
-        this.tags.splice(this.deletingIndex,1)
-        this.message("success", "Tag Name was deleted successfully.")
+        this.roles.splice(this.deletingIndex,1)
+        this.message("success", "The Role was deleted successfully.")
       }
       else {
         this.swr();

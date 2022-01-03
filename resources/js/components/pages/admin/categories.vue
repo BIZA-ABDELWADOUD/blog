@@ -28,7 +28,7 @@
         <div class="card">
           <div class="card-header">
             <Button size="small" type="primary" @click="Addmodal = true"
-              ><Icon type="md-add" />
+              v-if="isWritePermitted"><Icon type="md-add" />
               Add Category
             </Button>
           </div>
@@ -61,14 +61,14 @@
                       size="small"
                       type="warning"
                       @click="showeditmodal(category, i)"
-                      >Edit</Button
+                      v-if="isUpdatePermitted">Edit</Button
                     >
                     <Button
                       size="small"
                       type="error"
                       @click="showdeletingmodal(category, i)"
                       :loading="category.isDeleting"
-                      >Delete</Button
+                      v-if="isDeletePermitted">Delete</Button
                     >
                   </td>
                 </tr>

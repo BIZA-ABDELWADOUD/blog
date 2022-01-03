@@ -71,3 +71,7 @@ img.image_cat {
   .assign_button  {
       margin: 20px;
   }
+
+  ._input_field Button {
+      margin: 20 auto;
+  }

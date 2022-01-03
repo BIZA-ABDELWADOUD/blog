@@ -118,6 +118,14 @@ export default {
           name: "categories",
         },
         {
+          resourceName: "Blogs",
+          read: false,
+          write: false,
+          update: false,
+          delete: false,
+          name: "blogs",
+        },
+        {
           resourceName: "Users",
           read: false,
           write: false,
@@ -168,6 +176,14 @@ export default {
           update: false,
           delete: false,
           name: "categories",
+        },
+          {
+          resourceName: "Blogs",
+          read: false,
+          write: false,
+          update: false,
+          delete: false,
+          name: "blogs",
         },
         {
           resourceName: "Users",

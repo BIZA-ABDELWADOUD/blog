@@ -50,9 +50,10 @@ class UserController extends Controller
         // end new
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        return User::where('id',$request->id)->delete();
+
     }
 
     public function LoginMethod(LoginRequest $request) {
