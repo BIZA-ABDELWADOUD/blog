@@ -7,7 +7,8 @@ require("admin-lte");
 window.Vue = require('vue')
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
-Vue.use(ViewUI);
+import locale from 'view-design/dist/locale/en-US';
+Vue.use(ViewUI, {locale: locale});
 
 
 // import router file

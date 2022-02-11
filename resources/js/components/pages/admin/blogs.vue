@@ -26,27 +26,56 @@
     <!-- Main content -->
     <div class="row mt-3">
       <div class="col-12">
-        <div class="card">
+       
+
+        <div class="mt-2 mb-2">
+          <Input type="text" v-model="data.title" placeholder="Enter your title"></Input>
+        </div>
+
+         <div class="card">
           <!-- /.card-header -->
-          <div class="blog_editor">
+
+          <div class="blog_editor" style="">
             <editor
               ref="editor"
+              autofocus
+              holder-id="codex-editor"
+              save-button-id="save-button"
+              :init-data="initData"
+              
               :config="config"
-              :initialized="onInitialized"
-              @save="save"
             />
           </div>
-
           <!-- /.card-body -->
         </div>
 
-        <div class="_input_field">
-          <Input type="text" placeholder="Give your title"></Input>
+        <div class="mt-2">
+          <Input type="textarea" :rows="4" v-model="data.post_excerpt" placeholder="Enter post excerpt" />
         </div>
 
-        <div class="_input_field" style="margin-top: 20px">
-          <Button size="small" type="primary" @click="invokeSave"
-            >Save The Blog
+        <div class="mt-2">
+          <Select filterable multiple placeholder="Select category" v-model="data.category_id">
+            <Option v-for="(cat, i) in categories" :value="cat.id" :key="i">{{
+              cat.categoryName
+            }}</Option>
+          </Select>
+        </div>
+
+        <div class="mt-2">
+          <Select filterable multiple placeholder="Select Tag" v-model="data.tag_id">
+            <Option v-for="(tag, i) in tags" :value="tag.id" :key="i">{{
+              tag.tagName
+            }}</Option>
+          </Select>
+        </div>
+
+         <div class="mt-2">
+          <Input type="textarea" v-model="data.metaDescription" :rows="4" placeholder="Enter description" />
+        </div>
+
+        <div class="_input_field">
+          <Button size="small" type="primary" @click="save"
+            :loading="isCreating" :disabled="isCreating">{{isCreating ? "Creating..." : "Create Blog"}}
           </Button>
         </div>
 
@@ -69,7 +98,7 @@ export default {
         tools: {
           image: {
             class: ImageTool,
-           
+
             field: "image",
             types: "image/*",
           },
@@ -82,11 +111,22 @@ export default {
           header: require("@editorjs/header"),
         },
       },
-
+      initData: null,
+   
       data: {
-        tagName: "",
+        title: "",
+        post: "",
+        post_excerpt : "",
+        metaDescription : "",
+        category_id : [],
+        tag_id : [],
+        jsonData : null
+
       },
-      articleHTML: '',
+      articleHTML: "",
+      categories: [],
+      tags :[],
+      isCreating :false,
     };
   },
 
@@ -119,74 +159,90 @@ export default {
       }
     },
 
-    async onSave(response) {
-      var data = response
-      await this.outputHtml(data.blocks)
-			console.log(this.articleHtml)
-    },
-
-    async invokeSave() {
-      
-      // this.$refs.editor._data.state.editor.save();
+     save() {
       this.$refs.editor._data.state.editor
         .save()
         .then((data) => {
-          // Do what you want with the data here
-          console.log(data);
-        
-         
-        })
-        .catch((err) => {
-          console.log(err);
+         this.outputHtml(data.blocks)
+         this.data.post = this.articleHTML
+         this.data.jsonData = JSON.stringify(data)
+        if(this.data.title.trim() == '') return this.message('error','The title is required')
+        if(this.data.post.trim() == '') return this.message('error','The post is required')
+        if(this.data.post_excerpt.trim() == '') return this.message('error','The post excerpt is required')
+        if(this.data.metaDescription.trim() == '') return this.message('error','The description is required')
+        if(!this.data.category_id.length) return this.message('error','The category is required')
+        if(!this.data.tag_id.length) return this.message('error','The tag is required')
+        this.isCreating = true
+        const resblog =  this.ExecuteMethod('post','/app/create-blog',this.data)
+        if(resblog.status = 200) {
+          this.message('success','added successfuly')
+          console.log('it is working')
+        } else {
+          this.swr()
+          console.log('it is not working')
+        }
         });
     },
-   	 outputHtml(articleObj){
-		   articleObj.map(obj => {
-				switch (obj.type) {
-				case 'paragraph':
-					this.articleHTML += this.makeParagraph(obj);
-					break;
-				case 'image':
-					this.articleHTML += this.makeImage(obj);
-					break;
-				case 'header':
-					this.articleHTML += this.makeHeader(obj);
-					break;
-				case 'raw':
-					this.articleHTML += `<div class="ce-block">
+    outputHtml(articleObj) {
+      articleObj.map((obj) => {
+        switch (obj.type) {
+          case "paragraph":
+            this.articleHTML += this.makeParagraph(obj);
+            break;
+          case "image":
+            this.articleHTML += this.makeImage(obj);
+            break;
+          case "header":
+            this.articleHTML += this.makeHeader(obj);
+            break;
+          case "raw":
+            this.articleHTML += `<div class="ce-block">
 					<div class="ce-block__content">
 					<div class="ce-code">
 						<code>${obj.data.html}</code>
 					</div>
 					</div>
 				</div>\n`;
-					break;
-				case 'code':
-					this.articleHTML += this.makeCode(obj);
-					break;
-				case 'list':
-					this.articleHTML += this.makeList(obj)
-					break;
-				case "quote":
-					this.articleHTML += this.makeQuote(obj)
-					break;
-				case "warning":
-					this.articleHTML += this.makeWarning(obj)
-					break;
-				case "checklist":
-					this.articleHTML += this.makeChecklist(obj)
-					break;
-				case "embed":
-					this.articleHTML += this.makeEmbed(obj)
-					break;
-				case 'delimeter':
-					this.articleHTML += this.makeDelimeter(obj);
-					break;
-				default:
-					return '';
-				}
-			});
-		},
+            break;
+          case "code":
+            this.articleHTML += this.makeCode(obj);
+            break;
+          case "list":
+            this.articleHTML += this.makeList(obj);
+            break;
+          case "quote":
+            this.articleHTML += this.makeQuote(obj);
+            break;
+          case "warning":
+            this.articleHTML += this.makeWarning(obj);
+            break;
+          case "checklist":
+            this.articleHTML += this.makeChecklist(obj);
+            break;
+          case "embed":
+            this.articleHTML += this.makeEmbed(obj);
+            break;
+          case "delimeter":
+            this.articleHTML += this.makeDelimeter(obj);
+            break;
+          default:
+            return "";
+        }
+      });
+    },
+  },
+  async created() {
+    const [cat,tag] = await Promise.all([
+       this.ExecuteMethod("get", "/app/get_categories"),
+         this.ExecuteMethod("get", "/app/get_tags")
+    ])
+    
+    if (cat.status == 200) {
+      this.categories = cat.data,
+      this.tags = tag.data
+    } else {
+      this.swr();
+    }
   },
 };
 </script>

@@ -45,10 +45,18 @@ Route::prefix('app')->middleware([AdminCheck::class])->group(function(){
     Route::get('/get_categories','CategoryController@index');
     Route::post('/edit_category','CategoryController@update');
     Route::post('/delete_category','CategoryController@destroy');
+
+    Route::post('create-blog','BlogController@createBlog');
+    Route::get('blogsdata','BlogController@getBlogs');
 });
 
 
 Route::post('blogs','BlogController@uploadEditorImage');
+
+Route::get('slug','BlogController@slug');
+
+
+
 
 Route::get('/login', function () {
     return view('login');

@@ -125,6 +125,14 @@ export default {
           delete: false,
           name: "blogs",
         },
+         {
+          resourceName: "List Of Blogs",
+          read: false,
+          write: false,
+          update: false,
+          delete: false,
+          name: "blogsList",
+        },
         {
           resourceName: "Users",
           read: false,
@@ -184,6 +192,14 @@ export default {
           update: false,
           delete: false,
           name: "blogs",
+        },
+         {
+          resourceName: "List Of Blogs",
+          read: false,
+          write: false,
+          update: false,
+          delete: false,
+          name: "blogsList",
         },
         {
           resourceName: "Users",
@@ -249,6 +265,7 @@ export default {
          this.data.id = res.data[0].id
          if(res.data[0].Permission) {
            this.resources = JSON.parse(res.data[0].Permission)
+          //this.resources = this.DefaultRessources
          }
 
       }

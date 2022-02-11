@@ -10,6 +10,7 @@ import login from './components/pages/admin/login.vue'
 import role from './components/pages/admin/role.vue'
 import roleAssign from './components/pages/admin/roleAssign.vue'
 import blogs from './components/pages/admin/blogs.vue'
+import blogsList from './components/pages/admin/blogsList.vue'
 
 
 
@@ -55,7 +56,11 @@ const routes = [
         component : roleAssign,
         name : 'Assign_Roles'
     },
-  
+    {
+        path : '/blogsList',
+        component : blogsList,
+        name : 'blogsList'
+    },
   
 
 
