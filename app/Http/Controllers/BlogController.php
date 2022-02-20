@@ -15,7 +15,7 @@ class BlogController extends Controller
     
     public function index()
     {
-        //
+        return Blog::with(['categories','tags'])->latest()->get();
     }
 
 
@@ -30,9 +30,9 @@ class BlogController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        return Blog::where('id',$request->id)->delete();
     }
 
     public function uploadEditorImage(Request $request) {
@@ -50,19 +50,7 @@ class BlogController extends Controller
        return $picname;
     }
 
-    public function slug() {
-        $title = 'this is a testing title changed for our blog';
-        return Blog::create([
-            
-            'title' => $title,
-            'post' => "this is the post",
-            'post_excerpt' => "this is",
-          
-            'user_id' => 1,
-            'metaDescription'=> "description"
-        ]);
-        // return $title;
-    }
+  
 
     public function createBlog(BlogRequest $request) {
         $categories = $request->category_id;
@@ -75,9 +63,9 @@ class BlogController extends Controller
             
             $blog = Blog::create([
                 'title' => $request->title,
+                 'slug' => $request->title,
                 'post' => $request->post,
                 'post_excerpt' => $request->post_excerpt,
-              
                 'user_id' => Auth::user()->id,
                 'metaDescription'=> $request->metaDescription,
                 'jsonData'=> $request->jsonData
@@ -92,17 +80,19 @@ class BlogController extends Controller
             }
             Blogtag::insert($blogTags);
             DB::commit();
-            return 'yes';
+            return $blog;
 
         } catch (\Exception $e) {
             DB::rollback();
                 return 'no';
         }
         
-     
     }
 
-    public function getBlogs() {
-        return Blog::with(['categories','tags'])->get();
+    public function GetSingleBlog(Request $request,$id) {
+
+        return Blog::with(['categories','tags'])->where('id',$id)->first();
+
     }
+
 }

@@ -26,13 +26,15 @@
     <!-- Main content -->
     <div class="row mt-3">
       <div class="col-12">
-       
-
         <div class="mt-2 mb-2">
-          <Input type="text" v-model="data.title" placeholder="Enter your title"></Input>
+          <Input
+            type="text"
+            v-model="data.title"
+            placeholder="Enter your title"
+          ></Input>
         </div>
 
-         <div class="card">
+        <div class="card">
           <!-- /.card-header -->
 
           <div class="blog_editor" style="">
@@ -42,7 +44,6 @@
               holder-id="codex-editor"
               save-button-id="save-button"
               :init-data="initData"
-              
               :config="config"
             />
           </div>
@@ -50,11 +51,21 @@
         </div>
 
         <div class="mt-2">
-          <Input type="textarea" :rows="4" v-model="data.post_excerpt" placeholder="Enter post excerpt" />
+          <Input
+            type="textarea"
+            :rows="4"
+            v-model="data.post_excerpt"
+            placeholder="Enter post excerpt"
+          />
         </div>
 
         <div class="mt-2">
-          <Select filterable multiple placeholder="Select category" v-model="data.category_id">
+          <Select
+            filterable
+            multiple
+            placeholder="Select category"
+            v-model="data.category_id"
+          >
             <Option v-for="(cat, i) in categories" :value="cat.id" :key="i">{{
               cat.categoryName
             }}</Option>
@@ -62,20 +73,36 @@
         </div>
 
         <div class="mt-2">
-          <Select filterable multiple placeholder="Select Tag" v-model="data.tag_id">
+          <Select
+            filterable
+            multiple
+            placeholder="Select Tag"
+            v-model="data.tag_id"
+          >
             <Option v-for="(tag, i) in tags" :value="tag.id" :key="i">{{
               tag.tagName
             }}</Option>
           </Select>
         </div>
 
-         <div class="mt-2">
-          <Input type="textarea" v-model="data.metaDescription" :rows="4" placeholder="Enter description" />
+        <div class="mt-2">
+          <Input
+            type="textarea"
+            v-model="data.metaDescription"
+            :rows="4"
+            placeholder="Enter description"
+          />
         </div>
 
         <div class="_input_field">
-          <Button size="small" type="primary" @click="save"
-            :loading="isCreating" :disabled="isCreating">{{isCreating ? "Creating..." : "Create Blog"}}
+          <Button
+          v-if="isWritePermitted"
+            size="small"
+            type="primary"
+            @click="save"
+            :loading="isCreating"
+            :disabled="isCreating"
+            >{{ isCreating ? "Creating..." : "Create Blog" }}
           </Button>
         </div>
 
@@ -112,21 +139,20 @@ export default {
         },
       },
       initData: null,
-   
+
       data: {
         title: "",
         post: "",
-        post_excerpt : "",
-        metaDescription : "",
-        category_id : [],
-        tag_id : [],
-        jsonData : null
-
+        post_excerpt: "",
+        metaDescription: "",
+        category_id: [],
+        tag_id: [],
+        jsonData: null,
       },
       articleHTML: "",
       categories: [],
-      tags :[],
-      isCreating :false,
+      tags: [],
+      isCreating: false,
     };
   },
 
@@ -159,29 +185,44 @@ export default {
       }
     },
 
-     save() {
-      this.$refs.editor._data.state.editor
-        .save()
-        .then((data) => {
-         this.outputHtml(data.blocks)
-         this.data.post = this.articleHTML
-         this.data.jsonData = JSON.stringify(data)
-        if(this.data.title.trim() == '') return this.message('error','The title is required')
-        if(this.data.post.trim() == '') return this.message('error','The post is required')
-        if(this.data.post_excerpt.trim() == '') return this.message('error','The post excerpt is required')
-        if(this.data.metaDescription.trim() == '') return this.message('error','The description is required')
-        if(!this.data.category_id.length) return this.message('error','The category is required')
-        if(!this.data.tag_id.length) return this.message('error','The tag is required')
-        this.isCreating = true
-        const resblog =  this.ExecuteMethod('post','/app/create-blog',this.data)
-        if(resblog.status = 200) {
-          this.message('success','added successfuly')
-          console.log('it is working')
+    save() {
+      this.$refs.editor._data.state.editor.save().then((data) => {
+        this.outputHtml(data.blocks);
+        this.data.post = this.articleHTML;
+        this.data.jsonData = JSON.stringify(data);
+        if (this.data.title.trim() == "")
+          return this.message("error", "The title is required");
+        if (this.data.post.trim() == "")
+          return this.message("error", "The post is required");
+        if (this.data.post_excerpt.trim() == "")
+          return this.message("error", "The post excerpt is required");
+        if (this.data.metaDescription.trim() == "")
+          return this.message("error", "The description is required");
+        if (!this.data.category_id.length)
+          return this.message("error", "The category is required");
+        if (!this.data.tag_id.length)
+          return this.message("error", "The tag is required");
+        this.isCreating = true;
+        const resblog = this.ExecuteMethod(
+          "post",
+          "app/create-blog",
+          this.data
+        );
+        if ((resblog.status = 200)) {
+         // this.message('success','added successfuly ! click the button or reload the page')
+         
+          this.$router.push({ path: '/blogsList',name: 'blogsList',params: {foo: true}})
         } else {
-          this.swr()
-          console.log('it is not working')
+          if (resblog.status == 422) {
+            for (let i in resblog.data.errors) {
+              this.message('error',resblog.data.errors[i][0]);
+            }
+          } else {
+            this.swr();
+          }
         }
-        });
+        this.isCreating = false
+      });
     },
     outputHtml(articleObj) {
       articleObj.map((obj) => {
@@ -232,14 +273,13 @@ export default {
     },
   },
   async created() {
-    const [cat,tag] = await Promise.all([
-       this.ExecuteMethod("get", "/app/get_categories"),
-         this.ExecuteMethod("get", "/app/get_tags")
-    ])
-    
+    const [cat, tag] = await Promise.all([
+      this.ExecuteMethod("get", "/app/get_categories"),
+      this.ExecuteMethod("get", "/app/get_tags"),
+    ]);
+
     if (cat.status == 200) {
-      this.categories = cat.data,
-      this.tags = tag.data
+      (this.categories = cat.data), (this.tags = tag.data);
     } else {
       this.swr();
     }

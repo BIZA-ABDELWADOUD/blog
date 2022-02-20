@@ -8,29 +8,29 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $user = Auth::user();
-        return $this->CheckForPermission($user,$request);
-         
-        
+        return $this->CheckForPermission($user, $request);
     }
 
-    public function CheckForPermission($user,$request) {
-        // return $request->path();
-          $Permission = json_decode($user->role->Permission);
-          $hasPermission = false;
-         if(!$Permission) {
-            return view('welcome');
-         }
-         foreach($Permission as $p) {
-            if($p->name==$request->path()) {
-                if($p->read) {
+    public function CheckForPermission($user, $request)
+    {
+        $Permission = json_decode($user->role->Permission);
+        $hasPermission = false;
+        foreach ($Permission as $p) {
+            if ($p->name == $request->path()) {
+                if ($p->read) {
                     $hasPermission = true;
-                }   
+                } else {
+                    return view('notallowed');
+                }
             }
-         }
-         if($hasPermission) return view('welcome');
-          return 'not found'; 
-
+        }
+        if ($hasPermission) {
+            return view('welcome');
+        } 
+            return view('welcome');
+        
     }
 }

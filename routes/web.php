@@ -47,13 +47,13 @@ Route::prefix('app')->middleware([AdminCheck::class])->group(function(){
     Route::post('/delete_category','CategoryController@destroy');
 
     Route::post('create-blog','BlogController@createBlog');
-    Route::get('blogsdata','BlogController@getBlogs');
+    Route::post('/delete_blog','BlogController@destroy');
+    Route::get('/blogsdata','BlogController@index');
+    Route::get('/get_blog/{id}','BlogController@GetSingleBlog');
 });
 
 
 Route::post('blogs','BlogController@uploadEditorImage');
-
-Route::get('slug','BlogController@slug');
 
 
 
@@ -70,6 +70,4 @@ Route::get('/logout','UserController@logout');
 Route::get('/','HomeController@index')->middleware('auth')->name('home');
 
 Route::get('{slug}','HomeController@index')->middleware('auth')->name('home')->where('slug', '([A-z\d-\/_.]+)?');
-// Route::any('{slug}',function(){
-//     return view('welcome');
-// });
+

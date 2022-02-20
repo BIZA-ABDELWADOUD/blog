@@ -28,7 +28,7 @@ class BlogRequest extends FormRequest
             'post' => 'required',
             'post_excerpt' => 'required',
             'metaDescription' => 'required',
-            'slug' => 'required',
+            // 'slug' => 'required',
             'jsonData' => 'required',
             'category_id' => 'required',
             'tag_id' => 'required',

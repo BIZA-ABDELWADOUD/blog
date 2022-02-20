@@ -11,7 +11,7 @@ class Blog extends Model
      protected $fillable = ['id','title','post','post_excerpt','slug','user_id','featuredImage','metaDescription','views','jsonData'];
 
    
-    public function setTitleAttribute($title) {
+    public function setSlugAttribute($title) {
         $this->attributes['slug'] = $this->UniqueSlug($title);
     }
 

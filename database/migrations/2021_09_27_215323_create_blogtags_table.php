@@ -17,6 +17,7 @@ class CreateBlogtagsTable extends Migration
             $table->id();
             $table->integer('tag_id');
             $table->integer('blog_id');
+            $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade');
             $table->timestamps();
         });
     }

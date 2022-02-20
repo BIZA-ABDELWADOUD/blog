@@ -32,6 +32,10 @@
               ><Icon type="md-add" />
               Create New Blog
             </Button>
+            
+           <Button  type="success" size="small" v-if="$route.params.foo" @click="call()"> 
+               <p class="animate__animated animate__fadeIn animate__infinite 	infinite">Click here !!</p> 
+            </Button>
           </div>
           <!-- /.card-header -->
           <div class="card-body table-responsive p-0">
@@ -58,8 +62,8 @@
                     </td>
                   <td>{{ moment(blog.created_at).fromNow() }}</td>
                   <td>
-                    <Button size="small" type="primary" @click="">View</Button>
-                    <Button size="small" type="warning" @click="showeditmodal(blog,i)" v-if="isUpdatePermitted">Edit</Button>
+                    <Button size="small" type="primary" @click=""><Icon type="md-eye" /> View</Button>
+                    <Button size="small" type="warning" @click="$router.push(`/editblog/${blog.id}`)" v-if="isUpdatePermitted">Edit</Button>
                     <Button size="small" type="error" @click="showdeletingmodal(blog,i)" v-if="isDeletePermitted" :loading="blog.isDeleting">Delete</Button>
                   </td>
                 </tr>
@@ -81,9 +85,10 @@
             <span> confirmation</span>
         </p>
         <div style="text-align:center">
-          <p>Are you sure to delete the blog : <span style="color:#ed4014">{{deleteitem.blogName}}</span> ?</p>
+          <p>Are you sure to delete the blog with the title : <span style="color:#ed4014">{{deleteitem.title}}</span> ?</p>
         </div>
         <div slot="footer">
+
             <Button type="error" size="large" long :disabled="isDeleting" :loading="isDeleting" @click="deleteblog">{{isDeleting ? 'Deleting...' : 'Delete'}}</Button>
         </div>
     </Modal>
@@ -109,14 +114,36 @@ export default {
     };
   },
 
+  async created() {
+    const res = await this.ExecuteMethod('get', '/app/blogsdata');
+    if (res.status == 200) {
+      this.blogs = res.data 
+    } 
+    
+    else {
+      this.swr()
+    }
+  },
+
   methods: {
+    async call() {
+      const res = await this.ExecuteMethod('get', '/app/blogsdata');
+    if (res.status == 200) {
+      this.blogs = res.data
+      //method to confirm
+      this.message('success','Enjoy reading your new blog')
+      //
+      this.$route.params.foo = false
+    } 
+    
+    },
 
     async deleteblog(blog,i) {
       this.isDeleting = true
       const res = await this.ExecuteMethod('post','/app/delete_blog',this.deleteitem)
       if(res.status==200) {
         this.blogs.splice(this.deletingIndex,1)
-        this.message("success", "blog Name was deleted successfully.")
+        this.message("success", "The blog was deleted sucessfully.")
       }
       else {
         this.swr();
@@ -131,15 +158,6 @@ export default {
     }
   },
 
-  async created() {
-    const res = await this.ExecuteMethod("get", "/app/blogsdata");
-    if (res.status == 200) {
-      this.blogs = res.data 
-    } 
-    
-    else {
-      this.swr()
-    }
-  },
+
 };
 </script>

@@ -70,7 +70,7 @@
                 data-accordion="false"
               >
                 <li class="nav-item" v-for="(menuItem,i) in Permission" :key="i" v-if="Permission.length && menuItem.read">
-                  <router-link :to="menuItem.name">
+                  <router-link :to="'/'+menuItem.name">
                     <p class="nav-link">
                       <i class="fas fa-tachometer-alt"></i>
                       {{menuItem.resourceName}}
